@@ -1,14 +1,21 @@
 package com.jinoprac.springboot_prac.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 
 @Entity
+@Getter
+@Builder
 public class Post {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto_Increment
     private Long id;
+
+    @Column(name = "제목", nullable = false)
+    private String title;
+
+    @Column(name = "내용", nullable = false)
+    private String content;
 }
