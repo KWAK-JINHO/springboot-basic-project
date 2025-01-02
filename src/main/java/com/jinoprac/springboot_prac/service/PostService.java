@@ -32,4 +32,7 @@ public class PostService {
                 .content(savedPost.getContent())
                 .build();
     }
+
+    // 게시글 전체 조회 기능
+    // 게시글을 조회할 때 `id`, `제목`, `내용`의 값이 포함돼야 한다.
 }
