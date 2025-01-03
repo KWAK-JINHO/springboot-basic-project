@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 @Builder
 public class PostCreateResponse {
 
+    private Long id;
     private String title;
     private String content;
-    private Timestamp createAt;
 }

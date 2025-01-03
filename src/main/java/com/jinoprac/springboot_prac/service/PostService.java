@@ -28,6 +28,7 @@ public class PostService {
         // 트랜잭션이 없는경우에는 save 이후 즉시 DB에 저장된다.
 
         return PostCreateResponse.builder()
+                .id(savedPost.getId())
                 .title(savedPost.getTitle())
                 .content(savedPost.getContent())
                 .build();

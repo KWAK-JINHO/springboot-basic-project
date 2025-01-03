@@ -337,3 +337,14 @@ public void 값과_로직이_함께() {
 
 - 오버로딩된 생성자 -> 생성자를 여러개 정의하여 간단한 매개변수 조합 처리
 - Static Factory Method -> 객체 생성 로직을 간결하고 직관적으로 만들 수 있다.
+
+---
+
+# 몰랐던걸 알게된 내용
+
+## application.yml 파일 설정
+
+### datasource 설정
+- "useSSL = false": DB 연결 시 SSL(Secure Sockets Layer)보안 연결을 사용하지 않도록 설정. SSL 경고를 피할 수 있다.
+개발환경에서는 false설정이 일반적, 운영환경에서 true와 함께 SSL 인증서 설정을 사용하는것을 권장
+- "allowPublicKeyRetrieval=true":  서버의 PK를 직접 요청할 수 있도록 허용

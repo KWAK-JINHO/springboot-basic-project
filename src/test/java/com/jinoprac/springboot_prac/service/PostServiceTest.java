@@ -27,7 +27,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("글 작성 테스트")
-    void 글_작성_테스트입니다() {
+    void post_write_test() {
         // given
         PostCreateRequest postCreateRequest = PostCreateRequest.builder()
                 .title("제목입니다")
@@ -39,5 +39,13 @@ class PostServiceTest {
 
         // then
         assertEquals(1L, postRepository.count());
+        Post post = postRepository.findAll().get(0);
+        assertEquals("제목입니다", post.getTitle());
+        assertEquals("내용입니다", post.getContent());
+        assertNotNull(post.getId());
+        System.out.println("ID는" + post.getId() + "입니다.");
     }
+
+
+
 }
