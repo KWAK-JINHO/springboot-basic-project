@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostCreateRequest {
+public class PostCreate {
 
     @NotBlank(message = "제목은 필수 입력값 입니다.")
     private String title;

@@ -2,8 +2,9 @@ package com.jinoprac.springboot_prac.service;
 
 import com.jinoprac.springboot_prac.entity.Post;
 import com.jinoprac.springboot_prac.repository.post.PostRepository;
-import com.jinoprac.springboot_prac.request.PostCreateRequest;
+import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.response.PostCreateResponse;
+import com.jinoprac.springboot_prac.response.PostGetResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -18,22 +19,30 @@ public class PostService {
     }
 
     // 게시글 작성
-    public PostCreateResponse create(PostCreateRequest postCreateRequest) {
+    public PostCreateResponse create(PostCreate postCreate) {
         Post post = Post.builder()
-                .title(postCreateRequest.getTitle())
-                .content(postCreateRequest.getContent())
+                .title(postCreate.getTitle())
+                .content(postCreate.getContent())
                 .build();
 
         Post savedPost = postRepository.save(post);
-        // 트랜잭션이 없는경우에는 save 이후 즉시 DB에 저장된다.
 
         return PostCreateResponse.builder()
-                .id(savedPost.getId())
-                .title(savedPost.getTitle())
-                .content(savedPost.getContent())
+                .id(savedPost.getId()) // 게시글 작성 후 작성된 페이지로 이동하기 위한 정보
                 .build();
     }
 
-    // 게시글 전체 조회 기능
-    // 게시글을 조회할 때 `id`, `제목`, `내용`의 값이 포함돼야 한다.
+    // 게시글 1개 조회
+    public PostGetResponse get(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        return PostGetResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .build();
+    }
+
+    // 게시글
 }
