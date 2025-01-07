@@ -28,6 +28,8 @@
 # Controller 레이어
 
 - Spring MVC 에서 URL 경로의 일부를 변수로 바인딩하기 위해 사용하는 어노테이션 {} 부분을 바인딩
+- ResponseEntity란? HTTP 응답 상태 코드, 응답 본문, 응답 헤더를 직접 설정할 수 있는 클래스로 응답 데이터가 JSON형태로 자동 직렬화 되어 클라이언트에 반환.
+Spring Boot에서 제공하는 클래스.
 
 # Service 레이어
 

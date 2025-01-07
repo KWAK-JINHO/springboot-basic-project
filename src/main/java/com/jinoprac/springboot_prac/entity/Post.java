@@ -22,4 +22,9 @@ public class Post {
 
     @Column(name = "내용", nullable = false)
     private String content;
+
+    public void edit(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

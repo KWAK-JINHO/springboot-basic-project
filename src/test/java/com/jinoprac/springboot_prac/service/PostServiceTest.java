@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -28,7 +30,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("글 작성 테스트 입니다.")
-    void 글_작성_테스트() {
+    void 게시글_작성_테스트() {
         // given
         PostCreate postCreate = PostCreate.builder()
                 .title("제목입니다")
@@ -36,7 +38,7 @@ class PostServiceTest {
                 .build();
 
         // when
-        postService.create(postCreate);
+        postService.createPost(postCreate);
 
         // then
         assertEquals(1L, postRepository.count());
@@ -49,7 +51,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("글 1개 조회 테스트 입니다.")
-    void 글_1개조회_테스트() {
+    void 게시글_1개조회_테스트() {
         //given
         Post requestPost = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
                 .title("제목입니다.")
@@ -58,11 +60,33 @@ class PostServiceTest {
         postRepository.save(requestPost);
 
         // when
-        PostGetResponse postGetResponse = postService.get(requestPost.getId()); // PostReadResponse 객체에 위에 저장한 엔티티의 id를 할당
+        PostGetResponse postGetResponse = postService.getPost(requestPost.getId()); // PostReadResponse 객체에 위에 저장한 엔티티의 id를 할당
 
         // then
         assertNotNull(postGetResponse);
         assertEquals("제목입니다.", postGetResponse.getTitle());
         assertEquals("내용입니다.", postGetResponse.getContent());
     }
+
+    @Test
+    @DisplayName("글 전체 조회 테스트 입니다.")
+    void 게시글_전체조회_테스트() {
+        // given
+        List<Post> posts = List.of(
+                new Post(null, "제목1", "내용1"),
+                new Post(null, "제목2", "내용2"),
+                new Post(null, "제목3", "내용3")
+        );
+        postRepository.saveAll(posts);
+
+        // when
+        List<PostGetResponse> responses = postService.getAllPosts();
+
+        // then
+        assertEquals(3, responses.size());
+        assertEquals("제목1", responses.get(0).getTitle());
+        assertEquals("제목2", responses.get(1).getTitle());
+        assertEquals("제목3", responses.get(2).getTitle());
+    }
+
 }
