@@ -3,6 +3,7 @@ package com.jinoprac.springboot_prac.service;
 import com.jinoprac.springboot_prac.entity.Post;
 import com.jinoprac.springboot_prac.repository.post.PostRepository;
 import com.jinoprac.springboot_prac.request.PostCreate;
+import com.jinoprac.springboot_prac.request.PostEdit;
 import com.jinoprac.springboot_prac.response.PostGetResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -87,6 +88,30 @@ class PostServiceTest {
         assertEquals("제목1", responses.get(0).getTitle());
         assertEquals("제목2", responses.get(1).getTitle());
         assertEquals("제목3", responses.get(2).getTitle());
+    }
+
+    @Test
+    @DisplayName("게시글 제목수정 테스트입니다..")
+    void 게시글_제목수정_테스트() {
+        //given
+        Post post = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
+                .title("제목입니다.")
+                .content("내용입니다.")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("수정된 제목입니다.")
+                .content("내용입니다.")
+                .build();
+
+        // when
+        postService.editPost(post.getId(), postEdit);
+
+        // then
+        Post changePost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재 하지 않습니다. id" + post.getId()));
+        assertEquals("수정된 제목입니다.", changePost.getTitle());
     }
 
 }
