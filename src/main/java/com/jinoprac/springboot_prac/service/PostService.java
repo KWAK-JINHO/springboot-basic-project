@@ -5,7 +5,6 @@ import com.jinoprac.springboot_prac.repository.post.PostRepository;
 import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.request.PostEdit;
 import com.jinoprac.springboot_prac.response.PostCreateResponse;
-import com.jinoprac.springboot_prac.response.PostEditResponse;
 import com.jinoprac.springboot_prac.response.PostGetResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -61,12 +60,20 @@ public class PostService {
         return responses;
     }
 
-    // 특정 게시글 수정 기능
+    // 게시글 수정
     public void editPost(Long id, PostEdit postEdit) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
 
         post.edit(postEdit.getTitle(), postEdit.getContent());
         // Post 필드의 값이 변경되었기 때문에 JPA가 변경을 감지해 DB에 반영한다. @Transactional로 인해서 트랜잭션이 커밋되는 시점에 자동으로 UPDATE 쿼리가 발생함
+    }
+
+    // 게시글 삭제
+    public void deletePost(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+        postRepository.delete(post);
     }
 }

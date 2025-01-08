@@ -114,4 +114,21 @@ class PostServiceTest {
         assertEquals("수정된 제목입니다.", changePost.getTitle());
     }
 
+    @Test
+    @DisplayName("게시글 삭제 테스트입니다")
+    public void 게시글이_잘지워지나요() {
+        // given
+        Post post = Post.builder()
+                .title("제목입니다")
+                .content("내용입니다")
+                .build();
+
+        postRepository.save(post);
+
+        // when
+        postService.deletePost(post.getId());
+
+        // then
+        assertEquals(0, postRepository.count());
+    }
 }

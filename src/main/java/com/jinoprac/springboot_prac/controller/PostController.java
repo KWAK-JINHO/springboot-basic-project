@@ -48,4 +48,11 @@ public class PostController {
     public void editPost(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
         postService.editPost(postId, request);
     }
+
+    // 게시글 삭제
+    @DeleteMapping("/posts/{postId}")
+    public void delete(@PathVariable Long postId) {
+        postService.deletePost(postId);
+    }
+
 }
