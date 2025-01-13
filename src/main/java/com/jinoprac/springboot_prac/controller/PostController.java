@@ -3,6 +3,7 @@ package com.jinoprac.springboot_prac.controller;
 import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.request.PostEdit;
 import com.jinoprac.springboot_prac.response.PostCreateResponse;
+import com.jinoprac.springboot_prac.response.PostEditResponse;
 import com.jinoprac.springboot_prac.response.PostGetResponse;
 import com.jinoprac.springboot_prac.service.PostService;
 import jakarta.validation.Valid;
@@ -20,33 +21,30 @@ public class PostController {
     private final PostService postService;
 
     // 게시글 작성
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/posts")
-    public ResponseEntity<PostCreateResponse> createPost(@RequestBody @Valid PostCreate request) {
-        PostCreateResponse response = postService.createPost(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public PostCreateResponse createPost(@RequestBody @Valid PostCreate request) {
+        return postService.createPost(request);
     }
-
-//    @GetMapping("/posts/{postId}")
-//    public @ResponseBody ResponseEntity<PostReadResponse> readPost(@PathVariable("postId") Long postId) {
-//        return ResponseEntity.ok(postService.read(postId));
-//    }
 
     // 게시글 1개 조회
     @GetMapping("/posts/{postId}")
-    public PostGetResponse getPost(@PathVariable Long postId) {
-        return postService.getPost(postId);
+    public ResponseEntity<PostGetResponse> getPost(@PathVariable Long postId) { //ResponseEntity 사용시 성능차이는 밀리초 단위 이하
+        return ResponseEntity.ok(postService.getPost(postId));
     }
 
     // 게시글 전체 조회
     @GetMapping("/posts/all")
-    public List<PostGetResponse> getAllPosts() {
-        return postService.getAllPosts();
+    public ResponseEntity<List<PostGetResponse>> getAllPosts() {
+        List<PostGetResponse> responses = postService.getAllPosts();
+        return ResponseEntity.ok(responses);
     }
 
     // 게시글 수정
     @PatchMapping("/posts/{postId}")
-    public void editPost(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
-        postService.editPost(postId, request);
+    public ResponseEntity<PostEditResponse> editPost(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        PostEditResponse updatedPost = postService.editPost(postId, request);
+        return ResponseEntity.ok(updatedPost);
     }
 
     // 게시글 삭제
@@ -54,5 +52,4 @@ public class PostController {
     public void delete(@PathVariable Long postId) {
         postService.deletePost(postId);
     }
-
 }

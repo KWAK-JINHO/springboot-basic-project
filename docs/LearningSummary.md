@@ -1,19 +1,24 @@
-# 프로젝트 학습 목표
-
-1. HTTP Method 7 things 학습
-2. Request Body, Query Params, Path Params 학습
-3. Test Code BDD(behavior Driven Development)형식으로 작성
-4. 정적 펙토리 메서드 (Static Factory Method)
-5. 일급 컬렉션 (First Class Collection) 학습
-6. One method, one responsibility
-7. Law of Demeter and Tell, Don't Ask
-8. setter 를 지양
-9. Mapper 사용
-10. 빌터 패턴 학습
-
----
-
 # I Learned
+
+# Restful 하게 만들자
+
+1. 자원(엔티티 테이블 등)의 접근을 URI로 표현
+   - 사용 예시) /user, /user/{id}
+2. HTTP Method로 자원에 대한 행위를 표현
+   - 사용 예시) 
+     - GET: 데이터 조회 -> 서버의 상태를 변경하지 않는다
+     - POST: 데이터 생성/처리 -> 서버의 상태를 변경시킴
+     - PUT: 리소스 전체 수정/생성
+       -> 리소스 전체를 수정하거나 새로 생성할 때 사용.
+       -> 데이터가 기존에 있었으면 수정 없으면 생성
+     - PATCH: 리소스 일부 수정
+       -> PUT과 비슷하지만, 리소스의 일부만 수정한다. 요청 본문에 수정할 데이터만 포함
+     - DELETE: 서버 리소스 삭제
+     - HEAD: 메타데이터 조회
+     - OPTIONS: 서버가  지원하는 HTTP 메서드 확인용도
+     - TRACE: 요청 경로 추적
+     - CONNECT: 터널링
+3. 정의되어 있는 HTTP 상태코드를 잘 사용하자
 
 # application.yml 파일 설정
 

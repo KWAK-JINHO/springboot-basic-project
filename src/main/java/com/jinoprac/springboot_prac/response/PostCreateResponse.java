@@ -5,9 +5,9 @@ import lombok.Getter;
 
 import java.sql.Timestamp;
 
-@Getter
 @Builder
+@Getter
 public class PostCreateResponse {
 
-    private Long id;
+    private final Long id;
 }
