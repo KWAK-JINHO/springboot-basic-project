@@ -21,8 +21,8 @@ public class PostController {
     private final PostService postService;
 
     // 게시글 작성
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/posts")
+    @ResponseStatus(HttpStatus.CREATED)
     public PostCreateResponse createPost(@RequestBody @Valid PostCreate request) {
         return postService.createPost(request);
     }
@@ -49,6 +49,7 @@ public class PostController {
 
     // 게시글 삭제
     @DeleteMapping("/posts/{postId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT) // 204: 응답 바디에 콘텐츠 없음
     public void delete(@PathVariable Long postId) {
         postService.deletePost(postId);
     }
