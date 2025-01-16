@@ -1,6 +1,7 @@
 package com.jinoprac.springboot_prac.service;
 
 import com.jinoprac.springboot_prac.entity.Post;
+import com.jinoprac.springboot_prac.exception.PostNotFound;
 import com.jinoprac.springboot_prac.repository.post.PostRepository;
 import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.request.PostEdit;
@@ -54,19 +55,35 @@ class PostServiceTest {
     @DisplayName("글 1개 조회 테스트 입니다.")
     void 게시글_1개조회_테스트() {
         //given
-        Post requestPost = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
+        Post post = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
                 .title("제목입니다.")
                 .content("내용입니다.")
                 .build();
-        postRepository.save(requestPost);
+        postRepository.save(post);
 
         // when
-        PostGetResponse postGetResponse = postService.getPost(requestPost.getId()); // PostReadResponse 객체에 위에 저장한 엔티티의 id를 할당
+        PostGetResponse postGetResponse = postService.getPost(post.getId()); // PostReadResponse 객체에 위에 저장한 엔티티의 id를 할당
 
         // then
         assertNotNull(postGetResponse);
         assertEquals("제목입니다.", postGetResponse.getTitle());
         assertEquals("내용입니다.", postGetResponse.getContent());
+    }
+
+    @Test
+    @DisplayName("글 1개 조회 테스트 입니다.")
+    void 게시글_1개조회_실패_테스트() {
+        //given
+        Post post = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
+                .title("제목입니다.")
+                .content("내용입니다.")
+                .build();
+        postRepository.save(post);
+
+        // expected
+        assertThrows(PostNotFound.class, () -> {
+            postService.getPost(post.getId() + 1L);
+        });
     }
 
     @Test
@@ -91,7 +108,7 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 제목수정 테스트입니다..")
+    @DisplayName("게시글 제목수정 테스트입니다.")
     void 게시글_제목수정_테스트() {
         //given
         Post post = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
@@ -115,8 +132,29 @@ class PostServiceTest {
     }
 
     @Test
+    @DisplayName("게시글 제목수정 - 게시글이 존재 하지 않을 때.")
+    void 글이_존재하지_않을_때_게시글_제목수정_테스트입니다() {
+        //given
+        Post post = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
+                .title("제목입니다.")
+                .content("내용입니다.")
+                .build();
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("수정된 제목입니다.")
+                .content("내용입니다.")
+                .build();
+
+        // expected
+        assertThrows(PostNotFound.class, () -> {
+            postService.editPost(post.getId() + 1L, postEdit);
+        });
+    }
+
+    @Test
     @DisplayName("게시글 삭제 테스트입니다")
-    public void 게시글이_잘지워지나요() {
+    void 게시글이_잘지워지나요() {
         // given
         Post post = Post.builder()
                 .title("제목입니다")
@@ -130,5 +168,22 @@ class PostServiceTest {
 
         // then
         assertEquals(0, postRepository.count());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 - 존재하지 않는 글")
+    void 게시글이_존재하지_않을_때_삭제시도() {
+        // given
+        Post post = Post.builder()
+                .title("제목입니다")
+                .content("내용입니다")
+                .build();
+
+        postRepository.save(post);
+
+        // expected
+        assertThrows(PostNotFound.class, () -> {
+            postService.deletePost(post.getId() + 1L);
+        });
     }
 }

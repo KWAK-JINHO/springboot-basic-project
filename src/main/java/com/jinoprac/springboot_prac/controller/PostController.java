@@ -1,5 +1,6 @@
 package com.jinoprac.springboot_prac.controller;
 
+import com.jinoprac.springboot_prac.exception.InvalidRequest;
 import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.request.PostEdit;
 import com.jinoprac.springboot_prac.response.PostCreateResponse;
@@ -24,6 +25,8 @@ public class PostController {
     @PostMapping("/posts")
     @ResponseStatus(HttpStatus.CREATED)
     public PostCreateResponse createPost(@RequestBody @Valid PostCreate request) {
+        request.validate();
+
         return postService.createPost(request);
     }
 
