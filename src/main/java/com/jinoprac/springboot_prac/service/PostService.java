@@ -9,8 +9,12 @@ import com.jinoprac.springboot_prac.response.PostEditResponse;
 import com.jinoprac.springboot_prac.response.PostGetResponse;
 import com.jinoprac.springboot_prac.exception.PostNotFound;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +33,7 @@ public class PostService {
         Post post = Post.builder()
                 .title(postCreate.getTitle())
                 .content(postCreate.getContent())
+//                .createAt(LocalDateTime.now())
                 .build();
 
         Post savedPost = postRepository.save(post);
@@ -41,23 +46,30 @@ public class PostService {
     // 게시글 1개 조회
     public PostGetResponse getPost(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new PostNotFound());
+                .orElseThrow(PostNotFound::new);
         // postNotFound라는 메서드를 정의해서 의미있는 오류를 던져준다.
 
         return PostGetResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
+                .createAt(post.getCreateAt())
                 .build();
     }
 
     // 게시글 전체 조회
-    public List<PostGetResponse> getAllPosts() {
-        List<Post> posts = postRepository.findAll(); // 레포의 모든 Post 찾기
-        List<PostGetResponse> responses = new ArrayList<>(); //  반환해줄 DTO 리스트 생성
+    public List<PostGetResponse> getAllPosts(int page) {
+        Pageable pageable = new PageRequest();
+        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createAt")); // 최신글부터 조회
 
+        List<PostGetResponse> responses = new ArrayList<>(); //  반환해줄 DTO 리스트 생성
         for(Post post : posts) {
-            PostGetResponse response = new PostGetResponse(post.getId(), post.getTitle(), post.getContent());
+            PostGetResponse response = new PostGetResponse(
+                    post.getId(),
+                    post.getTitle(),
+                    post.getContent(),
+                    post.getCreateAt()
+                    );
             responses.add(response);
         }
         return responses;

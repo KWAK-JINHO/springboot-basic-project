@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -91,20 +93,41 @@ class PostServiceTest {
     void 게시글_전체조회_테스트() {
         // given
         List<Post> posts = List.of(
-                new Post(null, "제목1", "내용1"),
-                new Post(null, "제목2", "내용2"),
-                new Post(null, "제목3", "내용3")
+                new Post(null, "제목1", "내용1", null),
+                new Post(null, "제목2", "내용2", null),
+                new Post(null, "제목3", "내용3", null)
         );
         postRepository.saveAll(posts);
 
         // when
-        List<PostGetResponse> responses = postService.getAllPosts();
+        List<PostGetResponse> responses = postService.getAllPosts(1);
 
         // then
         assertEquals(3, responses.size());
         assertEquals("제목1", responses.get(0).getTitle());
         assertEquals("제목2", responses.get(1).getTitle());
         assertEquals("제목3", responses.get(2).getTitle());
+    }
+
+    @Test
+    @DisplayName("게시글 1페이지 조회")
+    void 게시글_1페이지_조회_테스트() {
+        // given
+        List<Post> requestPosts = IntStream.range(0, 100)
+                .mapToObj(i -> Post.builder()
+                        .title("제목 - " + i)
+                        .content("내용 - " + i)
+                        .build())
+                .collect(Collectors.toList());
+        postRepository.saveAll(requestPosts);
+
+        // when
+        List<PostGetResponse> posts = postService.getAllPosts(1);
+
+        // then
+        assertEquals(2L, posts.size());
+
+
     }
 
     @Test
@@ -138,6 +161,7 @@ class PostServiceTest {
         Post post = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
                 .title("제목입니다.")
                 .content("내용입니다.")
+//                .createAt(null)
                 .build();
         postRepository.save(post);
 

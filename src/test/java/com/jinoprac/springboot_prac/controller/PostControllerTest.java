@@ -143,6 +143,7 @@ class PostControllerTest {
         Post post = Post.builder()
                 .title("제목입니다")
                 .content("내용입니다")
+//                .createAt(null)
                 .build();
         postRepository.save(post);
 
@@ -165,11 +166,11 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("게시글 작성 시 제목에 '바보'는 표시될 수 없다.")
+    @DisplayName("게시글 작성 시 제목에 금지단어는 표시될 수 없다.")
     void 게시글_작성시_바보_금지() throws Exception {
         // given
         PostCreate postCreate = PostCreate.builder()
-                .title("바보입니다")
+                .title("무료판매중")
                 .content("내용입니다")
                 .build();
 

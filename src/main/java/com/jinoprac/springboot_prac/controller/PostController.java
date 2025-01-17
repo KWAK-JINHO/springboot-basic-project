@@ -39,7 +39,7 @@ public class PostController {
     // 게시글 전체 조회
     @GetMapping("/posts/all")
     public ResponseEntity<List<PostGetResponse>> getAllPosts() {
-        List<PostGetResponse> responses = postService.getAllPosts();
+        List<PostGetResponse> responses = postService.getAllPosts(1);
         return ResponseEntity.ok(responses);
     }
 
