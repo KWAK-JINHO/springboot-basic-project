@@ -59,7 +59,7 @@ public class PostService {
 
     // 게시글 전체 조회
     public List<PostGetResponse> getAllPosts(int page) {
-        Pageable pageable = new PageRequest();
+//        Pageable pageable = new PageRequest();
         List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createAt")); // 최신글부터 조회
 
         List<PostGetResponse> responses = new ArrayList<>(); //  반환해줄 DTO 리스트 생성
