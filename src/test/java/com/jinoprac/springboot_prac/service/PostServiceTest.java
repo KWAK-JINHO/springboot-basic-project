@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -95,7 +96,7 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("글 전체 조회 테스트 입니다.")
+    @DisplayName("글 여러개 조회 테스트 입니다.")
     void 게시글_전체조회_테스트() {
         // given
         List<Post> posts = List.of(
@@ -106,38 +107,38 @@ class PostServiceTest {
         postRepository.saveAll(posts);
 
         // when
-        List<PostGetResponse> responses = postService.getAllPosts(1);
+        List<PostGetResponse> responses = postService.getAllPosts(0);
 
         // then
         assertAll(
                 () -> assertEquals(3, responses.size()),
-                () -> assertEquals("제목1", responses.get(0).getTitle()),
+                () -> assertEquals("제목1", responses.get(2).getTitle()),
                 () -> assertEquals("제목2", responses.get(1).getTitle()),
-                () -> assertEquals("제목3", responses.get(2).getTitle())
+                () -> assertEquals("제목3", responses.get(0).getTitle())
         );
 
 
     }
 
     @Test
-    @DisplayName("게시글 1페이지 조회")
-    void 게시글_1페이지_조회_테스트() {
+    @DisplayName("게시글 페이지 조회시 100개씩 가지고 오나요?")
+    void 게시글_전체_조회시_100개씩_불러오기_테스트() {
         // given
-        List<Post> requestPosts = IntStream.range(0, 100)
+        List<Post> requestPosts = IntStream.range(1, 201)
                 .mapToObj(i -> Post.builder()
-                        .title("제목 - " + i)
-                        .content("내용 - " + i)
+                        .title("제목 " + i)
+                        .content("내용 " + i)
                         .build())
                 .collect(Collectors.toList());
         postRepository.saveAll(requestPosts);
 
         // when
-        List<PostGetResponse> posts = postService.getAllPosts(1);
+        List<PostGetResponse> posts = postService.getAllPosts(0);
 
         // then
-        assertEquals(2L, posts.size());
-
-
+        assertEquals(100L, posts.size());
+        assertEquals("제목 200", posts.get(0).getTitle());
+        assertEquals("제목 101", posts.get(99).getTitle());
     }
 
     @Test

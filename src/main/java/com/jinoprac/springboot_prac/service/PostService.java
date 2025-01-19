@@ -9,6 +9,7 @@ import com.jinoprac.springboot_prac.response.PostEditResponse;
 import com.jinoprac.springboot_prac.response.PostGetResponse;
 import com.jinoprac.springboot_prac.exception.PostNotFound;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,6 +31,8 @@ public class PostService {
 
     // 게시글 작성
     public PostCreateResponse createPost(PostCreate postCreate) {
+        // 왜 매퍼 안썻냐 ㅋ
+        // 엔티티로 빼라 ㅋ 메서드 ㅋ
         Post post = Post.builder()
                 .title(postCreate.getTitle())
                 .content(postCreate.getContent())
@@ -57,10 +60,13 @@ public class PostService {
                 .build();
     }
 
-    // 게시글 전체 조회
+    // 게시글 전체조회 -> 게시글 페이지 조회 로 변경
     public List<PostGetResponse> getAllPosts(int page) {
-//        Pageable pageable = new PageRequest();
-        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createAt")); // 최신글부터 조회
+        Pageable pageable = PageRequest.of(page, 100, Sort.by(Sort.Direction.DESC, "createAt"));
+
+        Page<Post> postPage = postRepository.findAll(pageable);
+
+        List<Post> posts = postPage.getContent();
 
         List<PostGetResponse> responses = new ArrayList<>(); //  반환해줄 DTO 리스트 생성
         for(Post post : posts) {
