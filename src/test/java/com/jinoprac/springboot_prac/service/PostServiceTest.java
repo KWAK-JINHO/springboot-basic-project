@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -107,7 +106,7 @@ class PostServiceTest {
         postRepository.saveAll(posts);
 
         // when
-        List<PostGetResponse> responses = postService.getAllPosts(0);
+        List<PostGetResponse> responses = postService.getPostList(0);
 
         // then
         assertAll(
@@ -133,7 +132,7 @@ class PostServiceTest {
         postRepository.saveAll(requestPosts);
 
         // when
-        List<PostGetResponse> posts = postService.getAllPosts(0);
+        List<PostGetResponse> posts = postService.getPostList(0);
 
         // then
         assertEquals(100L, posts.size());
@@ -220,5 +219,20 @@ class PostServiceTest {
         assertThrows(PostNotFound.class, () -> {
             postService.deletePost(post.getId() + 1L);
         });
+    }
+
+    @Test
+    @DisplayName("게시글 검색이 잘 돼요")
+    void 게시글_검색기능_테스트() {
+        // given
+        Post post = Post.builder()
+                .title()
+                .content()
+                .createAt()
+                .build();
+
+        // when
+
+        // then
     }
 }

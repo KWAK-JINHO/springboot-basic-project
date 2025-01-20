@@ -8,7 +8,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostRepositoryJpa extends JpaRepository<Post, Long> {
-    // 기본적인 CRUD는 JpaRepository에서 제공
-    // 추가적으로 필요한 CRUD 메서드는 여기서
+
+    // 게시글 페이지 조회
     Page<Post> findAll(Pageable pageable);
+
+    // 게시글 제목으로 검색
+    Page<Post> findByTitleContains(String title, Pageable pageable);
 }

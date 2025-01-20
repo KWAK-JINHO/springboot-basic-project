@@ -1,6 +1,5 @@
 package com.jinoprac.springboot_prac.controller;
 
-import com.jinoprac.springboot_prac.exception.InvalidRequest;
 import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.request.PostEdit;
 import com.jinoprac.springboot_prac.response.PostCreateResponse;
@@ -36,10 +35,10 @@ public class PostController {
         return ResponseEntity.ok(postService.getPost(postId));
     }
 
-    // 게시글 전체 조회
-    @GetMapping("/posts/all")
-    public ResponseEntity<List<PostGetResponse>> getAllPosts() {
-        List<PostGetResponse> responses = postService.getAllPosts(1);
+    // 게시글 전체 조회 -> 게시글 페이지 조회로 변경
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostGetResponse>> getPostList(@RequestParam(defaultValue = "0") int page) {
+        List<PostGetResponse> responses = postService.getPostList(page);
         return ResponseEntity.ok(responses);
     }
 
@@ -55,5 +54,16 @@ public class PostController {
     @ResponseStatus(HttpStatus.NO_CONTENT) // 204: 응답 바디에 콘텐츠 없음
     public void delete(@PathVariable Long postId) {
         postService.deletePost(postId);
+    }
+
+    // 게시글 검색
+    @GetMapping("/posts/search")
+    public ResponseEntity<List<PostGetResponse>> getSearchPosts(@RequestParam String title) {
+        List<PostGetResponse> responses = postService.searchPost(title);
+        // 검색결과가 없다면 noContent 상태코드 전달
+        if (responses.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(responses);
     }
 }
