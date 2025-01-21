@@ -20,7 +20,6 @@ import java.util.Map;
  */
 
 @Getter
-//@JsonInclude(value = JsonInclude.Include.NON_EMPTY)  클라이언트가 비어있지 않은 데이터만 내려달라고할 때 이렇게 해주면 설정 가능하다.
 public class ErrorResponse {
 
     private final String code;

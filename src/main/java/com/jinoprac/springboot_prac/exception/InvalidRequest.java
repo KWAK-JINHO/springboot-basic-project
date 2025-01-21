@@ -2,10 +2,8 @@ package com.jinoprac.springboot_prac.exception;
 
 import lombok.Getter;
 
-import javax.swing.*;
-
 /**
- * status -> 400 (이상적인 invalidRequest의 상태 코드)
+ * status -> 400
  */
 @Getter
 public class InvalidRequest extends BoardApplicationException {

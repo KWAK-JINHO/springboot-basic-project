@@ -48,42 +48,36 @@ class PostServiceTest {
         // then
         Post post = postRepository.findAll().get(0);
 
-        assertAll(
-                () -> assertEquals(1L, postRepository.count(), "게시글 수가 1이 아닙니다."),
-                () -> assertEquals("제목입니다", post.getTitle(), "제목이 일치하지 않습니다."),
-                () -> assertEquals("내용입니다", post.getContent(), "내용이 일치하지 않습니다."),
-                () -> assertNotNull(post.getId(), "ID가 null입니다.")
-        );
-
-        System.out.println("ID는" + post.getId() + "입니다.");
+        assertEquals(1L, postRepository.count(), "게시글 수가 1이 아닙니다.");
+        assertEquals("제목입니다", post.getTitle(), "제목이 일치하지 않습니다.");
+        assertEquals("내용입니다", post.getContent(), "내용이 일치하지 않습니다.");
+        assertNotNull(post.getId(), "ID가 null입니다.");
     }
 
     @Test
     @DisplayName("글 1개 조회 테스트 입니다.")
     void 게시글_1개조회_테스트() {
         //given
-        Post post = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
+        Post post = Post.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
                 .build();
         postRepository.save(post);
 
         // when
-        PostGetResponse postGetResponse = postService.getPost(post.getId()); // PostReadResponse 객체에 위에 저장한 엔티티의 id를 할당
+        PostGetResponse postGetResponse = postService.getPost(post.getId());
 
         // then
-        assertAll(
-                () -> assertNotNull(postGetResponse),
-                () -> assertEquals("제목입니다.", postGetResponse.getTitle()),
-                () -> assertEquals("내용입니다.", postGetResponse.getContent())
-        );
+        assertNotNull(postGetResponse);
+        assertEquals("제목입니다.", postGetResponse.getTitle());
+        assertEquals("내용입니다.", postGetResponse.getContent());
     }
 
     @Test
     @DisplayName("글 1개 조회 테스트 입니다.")
     void 게시글_1개조회_실패_테스트() {
         //given
-        Post post = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
+        Post post = Post.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
                 .build();
@@ -107,17 +101,13 @@ class PostServiceTest {
         postRepository.saveAll(posts);
 
         // when
-        List<PostGetResponse> responses = postService.getPostList(0);
+        List<PostGetResponse> responses = postService.getPostPage(0);
 
         // then
-        assertAll(
-                () -> assertEquals(3, responses.size()),
-                () -> assertEquals("제목1", responses.get(2).getTitle()),
-                () -> assertEquals("제목2", responses.get(1).getTitle()),
-                () -> assertEquals("제목3", responses.get(0).getTitle())
-        );
-
-
+        assertEquals(3, responses.size());
+        assertEquals("제목1", responses.get(2).getTitle());
+        assertEquals("제목2", responses.get(1).getTitle());
+        assertEquals("제목3", responses.get(0).getTitle());
     }
 
     @Test
@@ -133,7 +123,7 @@ class PostServiceTest {
         postRepository.saveAll(requestPosts);
 
         // when
-        List<PostGetResponse> posts = postService.getPostList(0);
+        List<PostGetResponse> posts = postService.getPostPage(0);
 
         // then
         assertEquals(100L, posts.size());
@@ -145,7 +135,7 @@ class PostServiceTest {
     @DisplayName("게시글 제목수정 테스트입니다.")
     void 게시글_제목수정_테스트() {
         //given
-        Post post = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
+        Post post = Post.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
                 .build();
@@ -169,10 +159,9 @@ class PostServiceTest {
     @DisplayName("게시글 제목수정 - 게시글이 존재 하지 않을 때.")
     void 글이_존재하지_않을_때_게시글_제목수정_테스트입니다() {
         //given
-        Post post = Post.builder() // Post엔티티 객체를 만들어서 title,과 content를 DB에 저장 (id는 GeneratedValue에 의해 자동생성)
+        Post post = Post.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
-//                .createAt(null)
                 .build();
         postRepository.save(post);
 
@@ -195,7 +184,6 @@ class PostServiceTest {
                 .title("제목입니다")
                 .content("내용입니다")
                 .build();
-
         postRepository.save(post);
 
         // when
@@ -213,7 +201,6 @@ class PostServiceTest {
                 .title("제목입니다")
                 .content("내용입니다")
                 .build();
-
         postRepository.save(post);
 
         // expected

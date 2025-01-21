@@ -5,7 +5,6 @@ import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
 
-// 최상위 예외클래스
 @Getter
 public abstract class BoardApplicationException extends RuntimeException {
 

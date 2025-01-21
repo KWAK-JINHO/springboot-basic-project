@@ -8,17 +8,16 @@ import lombok.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+@Value
 @Builder
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostCreate {
 
     @NotBlank(message = "제목은 필수 입력값 입니다.")
-    private String title;
+    String title;
 
     @NotBlank(message = "내용은 필수 입력값 입니다.")
-    private String content;
+    String content;
 
     public void validate() {
         String[] prohibitedWords = {"무료", "최저가", "할인", "구매"};
