@@ -2,6 +2,7 @@ package com.jinoprac.springboot_prac.controller;
 
 import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.request.PostEdit;
+import com.jinoprac.springboot_prac.request.PostSearch;
 import com.jinoprac.springboot_prac.response.PostCreateResponse;
 import com.jinoprac.springboot_prac.response.PostEditResponse;
 import com.jinoprac.springboot_prac.response.PostGetResponse;
@@ -58,8 +59,8 @@ public class PostController {
 
     // 게시글 검색
     @GetMapping("/posts/search")
-    public ResponseEntity<List<PostGetResponse>> getSearchPosts(@RequestParam String title) {
-        List<PostGetResponse> responses = postService.searchPost(title);
+    public ResponseEntity<List<PostGetResponse>> getSearchPosts(@RequestBody @Valid PostSearch request) {
+        List<PostGetResponse> responses = postService.searchPost(request);
         // 검색결과가 없다면 noContent 상태코드 전달
         if (responses.isEmpty()) {
             return ResponseEntity.noContent().build();

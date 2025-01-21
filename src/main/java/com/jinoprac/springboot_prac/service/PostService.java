@@ -5,6 +5,7 @@ import com.jinoprac.springboot_prac.exception.PostNotFound;
 import com.jinoprac.springboot_prac.repository.post.PostRepository;
 import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.request.PostEdit;
+import com.jinoprac.springboot_prac.request.PostSearch;
 import com.jinoprac.springboot_prac.response.PostCreateResponse;
 import com.jinoprac.springboot_prac.response.PostEditResponse;
 import com.jinoprac.springboot_prac.response.PostGetResponse;
@@ -15,8 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 
 @Transactional
 @Service
@@ -91,10 +92,11 @@ public class PostService {
     }
 
     // 게시글 검색
-    public List<PostGetResponse> searchPost(String title) {
+    public List<PostGetResponse> searchPost(PostSearch postSearch) {
 
         Pageable pageable = PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "createAt")); // Pageable 내부적으로 글이 100개가 안되도 있는 개수만큼만 가져오게 되어있음
-        Page<Post> postPage = postRepository.findByTitleContains(title, pageable);
+        Page<Post> postPage = postRepository.findByKeywordContaining(postSearch.getKeyword(), pageable);
+
         List<Post> posts = postPage.getContent();
         List<PostGetResponse> responses = new ArrayList<>();
         for(Post post : posts) {

@@ -29,7 +29,7 @@ public class Post {
     private LocalDateTime createAt;
 
     @PrePersist
-    private void create() {
+    private void createAt() {
         this.createAt = LocalDateTime.now();
     }
 
