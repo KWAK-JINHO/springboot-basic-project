@@ -164,10 +164,10 @@ class PostControllerTest {
 
     @Test
     @DisplayName("게시글 작성 시 제목에 금지단어는 표시될 수 없다.")
-    void 게시글_작성시_바보_금지() throws Exception {
+    void 게시글_작성시_금지단어_체크() throws Exception {
         // given
         PostCreate postCreate = PostCreate.builder()
-                .title("무료판매중")
+                .title("무 료판매중")
                 .content("내용입니다")
                 .build();
 
