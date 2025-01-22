@@ -8,6 +8,8 @@ import com.jinoprac.springboot_prac.response.PostEditResponse;
 import com.jinoprac.springboot_prac.response.PostGetResponse;
 import com.jinoprac.springboot_prac.service.PostService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +37,11 @@ public class PostController {
 
     @GetMapping("/posts/search")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<PostGetResponse>> getSearchPosts(@RequestBody @Valid PostSearch request) {
+    public ResponseEntity<List<PostGetResponse>> getSearchPosts(@RequestParam(required = false) String keyword) {
+        PostSearch request = PostSearch.builder()
+                .keyword(keyword)
+                .build();
         List<PostGetResponse> responses = postService.searchPost(request);
-        if (responses.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
         return ResponseEntity.ok(responses);
     }
 

@@ -1,12 +1,11 @@
 package com.jinoprac.springboot_prac.request;
 
 import com.jinoprac.springboot_prac.exception.InvalidRequest;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
 @Value
 @Builder

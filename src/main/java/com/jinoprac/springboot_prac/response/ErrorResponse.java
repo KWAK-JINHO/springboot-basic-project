@@ -1,9 +1,6 @@
 package com.jinoprac.springboot_prac.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,17 +13,17 @@ import java.util.Map;
  *         "title": "값을 입력해주세요."
  *     }
  * }
- * 위처럼 validation json object 를 생성해서 오류메세지 표기하는 방법을 사용하겠다.
  */
-
-@Getter
+//@Value
+@Builder
+//@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorResponse {
 
     private final String code;
     private final String message;
     private final Map<String, String> validation;
 
-    @Builder
+//    @Builder
     public ErrorResponse(String code, String message, Map<String, String> validation) {
         this.code = code;
         this.message = message;

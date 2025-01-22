@@ -1,22 +1,17 @@
 package com.jinoprac.springboot_prac.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto_Increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "제목", nullable = false)
@@ -27,6 +22,12 @@ public class Post {
 
     @Column(name = "생성 시간", nullable = false)
     private LocalDateTime createAt;
+
+    @Builder
+    public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 
     @PrePersist
     private void createAt() {
