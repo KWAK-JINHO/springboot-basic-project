@@ -2,6 +2,7 @@ package com.jinoprac.springboot_prac.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -24,13 +25,12 @@ public class Post {
     private LocalDateTime createAt;
 
     @Builder
-    public Post(String title, String content) {
+    private Post(
+            String title,
+            String content
+    ) {
         this.title = title;
         this.content = content;
-    }
-
-    @PrePersist
-    private void createAt() {
         this.createAt = LocalDateTime.now();
     }
 

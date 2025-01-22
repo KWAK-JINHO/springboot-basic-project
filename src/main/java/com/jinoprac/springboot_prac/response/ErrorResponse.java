@@ -1,6 +1,7 @@
 package com.jinoprac.springboot_prac.response;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,16 +15,14 @@ import java.util.Map;
  *     }
  * }
  */
-//@Value
 @Builder
-//@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public class ErrorResponse {
 
     private final String code;
     private final String message;
     private final Map<String, String> validation;
 
-//    @Builder
     public ErrorResponse(String code, String message, Map<String, String> validation) {
         this.code = code;
         this.message = message;

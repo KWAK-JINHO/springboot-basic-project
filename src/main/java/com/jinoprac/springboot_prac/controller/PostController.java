@@ -8,8 +8,6 @@ import com.jinoprac.springboot_prac.response.PostEditResponse;
 import com.jinoprac.springboot_prac.response.PostGetResponse;
 import com.jinoprac.springboot_prac.service.PostService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +24,7 @@ public class PostController {
     @GetMapping("/posts")
     @ResponseStatus(HttpStatus.OK)
     public List<PostGetResponse> getPostList(@RequestParam(defaultValue = "0") int page) {
-        return postService.getPostPage(page);
+        return postService.getPostList(page);
     }
 
     @GetMapping("/posts/{postId}")

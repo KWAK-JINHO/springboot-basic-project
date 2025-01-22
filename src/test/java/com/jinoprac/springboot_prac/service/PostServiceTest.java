@@ -94,14 +94,14 @@ class PostServiceTest {
     void 게시글_전체조회_테스트() {
         // given
         List<Post> posts = List.of(
-                new Post(null, "제목1", "내용1", LocalDateTime.now()),
-                new Post(null, "제목2", "내용2", LocalDateTime.now()),
-                new Post(null, "제목3", "내용3", LocalDateTime.now())
+                Post.builder().title("제목1").content("내용1").build(),
+                Post.builder().title("제목2").content("내용2").build(),
+                Post.builder().title("제목3").content("내용3").build()
         );
         postRepository.saveAll(posts);
 
         // when
-        List<PostGetResponse> responses = postService.getPostPage(0);
+        List<PostGetResponse> responses = postService.getPostList(0);
 
         // then
         assertEquals(3, responses.size());
@@ -123,7 +123,7 @@ class PostServiceTest {
         postRepository.saveAll(requestPosts);
 
         // when
-        List<PostGetResponse> posts = postService.getPostPage(0);
+        List<PostGetResponse> posts = postService.getPostList(0);
 
         // then
         assertEquals(100L, posts.size());

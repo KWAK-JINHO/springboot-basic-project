@@ -26,15 +26,22 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public PostCreateResponse createPost(PostCreate postCreate) {
-        Post post = Post.builder()
-                .title(postCreate.getTitle())
-                .content(postCreate.getContent())
-                .build();
-        Post savedPost = postRepository.save(post);
-        return PostCreateResponse.builder()
-                .id(savedPost.getId())
-                .build();
+    public List<PostGetResponse> getPostList(int page) {
+        Pageable pageable = PageRequest.of(page, 100, Sort.by(Sort.Direction.DESC, "createAt"));
+        Page<Post> postPage = postRepository.findPostByPage(pageable);
+
+        List<Post> posts = postPage.getContent();
+        List<PostGetResponse> responses = new ArrayList<>();
+        for(Post post : posts) {
+            PostGetResponse response = PostGetResponse.builder()
+                    .id(post.getId())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .createAt(post.getCreateAt())
+                    .build();
+            responses.add(response);
+        }
+        return responses;
     }
 
     public PostGetResponse getPost(Long id) {
@@ -47,22 +54,33 @@ public class PostService {
                 .build();
     }
 
-    public List<PostGetResponse> getPostPage(int page) {
-        Pageable pageable = PageRequest.of(page, 100, Sort.by(Sort.Direction.DESC, "createAt"));
-        Page<Post> postPage = postRepository.findPostByPage(pageable);
+    public List<PostGetResponse> searchPost(PostSearch postSearch) {
+        Pageable pageable = PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "createAt"));
+        Page<Post> postPage = postRepository.findByKeywordContaining(postSearch.getKeyword(), pageable);
 
         List<Post> posts = postPage.getContent();
         List<PostGetResponse> responses = new ArrayList<>();
         for(Post post : posts) {
-            PostGetResponse response = new PostGetResponse(
-                    post.getId(),
-                    post.getTitle(),
-                    post.getContent(),
-                    post.getCreateAt()
-                    );
+            PostGetResponse response = PostGetResponse.builder()
+                    .id(post.getId())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .createAt(post.getCreateAt())
+                    .build();
             responses.add(response);
         }
         return responses;
+    }
+
+    public PostCreateResponse createPost(PostCreate postCreate) {
+        Post post = Post.builder()
+                .title(postCreate.getTitle())
+                .content(postCreate.getContent())
+                .build();
+        Post savedPost = postRepository.save(post);
+        return PostCreateResponse.builder()
+                .id(savedPost.getId())
+                .build();
     }
 
     public PostEditResponse editPost(Long id, PostEdit postEdit) {
@@ -76,23 +94,5 @@ public class PostService {
     public void deletePost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFound());
         postRepository.delete(post);
-    }
-
-    public List<PostGetResponse> searchPost(PostSearch postSearch) {
-        Pageable pageable = PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "createAt"));
-        Page<Post> postPage = postRepository.findByKeywordContaining(postSearch.getKeyword(), pageable);
-
-        List<Post> posts = postPage.getContent();
-        List<PostGetResponse> responses = new ArrayList<>();
-        for(Post post : posts) {
-            PostGetResponse response = new PostGetResponse(
-                    post.getId(),
-                    post.getTitle(),
-                    post.getContent(),
-                    post.getCreateAt()
-            );
-            responses.add(response);
-        }
-        return responses;
     }
 }
