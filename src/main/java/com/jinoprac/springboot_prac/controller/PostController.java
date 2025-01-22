@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -45,8 +47,15 @@ public class PostController {
 
     @PostMapping("/posts")
     @ResponseStatus(HttpStatus.CREATED)
-    public PostCreateResponse createPost(@RequestBody @Valid PostCreate request) {
-        return postService.createPost(request);
+    public ResponseEntity<PostCreateResponse> createPost(@RequestBody @Valid PostCreate request) {
+        PostCreateResponse response = postService.createPost(request);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(response.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(response);
     }
 
     @PatchMapping("/posts/{postId}")
