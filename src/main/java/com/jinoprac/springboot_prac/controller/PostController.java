@@ -48,15 +48,8 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<PostCreateResponse> createPost(@RequestBody @Valid PostCreate request) {
-        PostCreateResponse response = postService.createPost(request);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(response.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(response);
+    public PostCreateResponse createPost(@RequestBody @Valid PostCreate request) {
+        return postService.createPost(request);
     }
 
     @PatchMapping("/{postId}")
