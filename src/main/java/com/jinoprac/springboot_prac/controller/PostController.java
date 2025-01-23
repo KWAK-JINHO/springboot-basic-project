@@ -19,23 +19,24 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/posts")
 public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/posts")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<PostGetResponse> getPostList(@RequestParam(defaultValue = "0") int page) {
         return postService.getPostList(page);
     }
 
-    @GetMapping("/posts/{postId}")
+    @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     public PostGetResponse getPost(@PathVariable Long postId) {
         return postService.getPost(postId);
     }
 
-    @GetMapping("/posts/search")
+    @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<PostGetResponse>> getSearchPosts(@RequestParam(required = false) String keyword) {
         PostSearch request = PostSearch.builder()
@@ -45,7 +46,7 @@ public class PostController {
         return ResponseEntity.ok(responses);
     }
 
-    @PostMapping("/posts")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<PostCreateResponse> createPost(@RequestBody @Valid PostCreate request) {
         PostCreateResponse response = postService.createPost(request);
@@ -58,13 +59,13 @@ public class PostController {
         return ResponseEntity.created(location).body(response);
     }
 
-    @PatchMapping("/posts/{postId}")
+    @PatchMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     public PostEditResponse editPost(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
         return postService.editPost(postId, request);
     }
 
-    @DeleteMapping("/posts/{postId}")
+    @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long postId) {
         postService.deletePost(postId);
