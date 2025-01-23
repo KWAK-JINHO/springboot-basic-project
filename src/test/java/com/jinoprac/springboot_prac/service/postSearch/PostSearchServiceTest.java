@@ -6,6 +6,8 @@ import com.jinoprac.springboot_prac.request.PostSearch;
 import com.jinoprac.springboot_prac.response.PostGetResponse;
 import com.jinoprac.springboot_prac.service.PostService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,6 +28,9 @@ public class PostSearchServiceTest {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private Validator validator;
 
     @BeforeEach
     void clean() {
@@ -78,5 +84,20 @@ public class PostSearchServiceTest {
 
         // then
         assertTrue(responses.isEmpty());
+    }
+
+    @Test
+    @DisplayName("검색어는 공백을 제외한 1글자 이상이어야 한다.")
+    void 공백을_포함하더라도_한글자_이상이면_유효하다() {
+        // Given
+        PostSearch postSearch = PostSearch.builder()
+                .keyword("   a   ")
+                .build();
+
+        // When
+        Set<ConstraintViolation<PostSearch>> violations = validator.validate(postSearch);
+
+        // Then
+        assertTrue(violations.isEmpty());
     }
 }
