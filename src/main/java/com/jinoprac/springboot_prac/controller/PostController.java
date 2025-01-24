@@ -23,7 +23,6 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public List<PostGetResponse> getPostList(@RequestParam(defaultValue = "0") int page) {
         if (page < 0 || page > 999) {
             throw new InvalidRequest("page", "페이지는 0 이상 999 이하만 가능합니다.");
@@ -32,13 +31,11 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    @ResponseStatus(HttpStatus.OK)
     public PostGetResponse getPost(@PathVariable Long postId) {
         return postService.getPost(postId);
     }
 
     @GetMapping("/search")
-    @ResponseStatus(HttpStatus.OK)
     public List<PostGetResponse> getSearchPosts(@RequestParam(required = false) String keyword) {
         PostSearch request = new PostSearch(keyword);
         return postService.searchPost(request);
@@ -51,7 +48,6 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}")
-    @ResponseStatus(HttpStatus.OK)
     public PostEditResponse editPost(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
         return postService.editPost(postId, request);
     }
