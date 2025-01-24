@@ -1,5 +1,7 @@
 package com.jinoprac.springboot_prac.controller;
 
+import com.jinoprac.springboot_prac.exception.InvalidRequest;
+import com.jinoprac.springboot_prac.exception.PostNotFound;
 import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.request.PostEdit;
 import com.jinoprac.springboot_prac.request.PostSearch;
@@ -27,6 +29,9 @@ public class PostController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<PostGetResponse> getPostList(@RequestParam(defaultValue = "0") int page) {
+        if (page < 0 || page > 999) {
+            throw new InvalidRequest("page", "페이지는 0 이상 999 이하만 가능합니다.");
+        }
         return postService.getPostList(page);
     }
 
