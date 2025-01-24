@@ -2,7 +2,6 @@ package com.jinoprac.springboot_prac.service;
 
 import com.jinoprac.springboot_prac.entity.Post;
 import com.jinoprac.springboot_prac.exception.PostNotFound;
-import com.jinoprac.springboot_prac.mapper.PostMapper;
 import com.jinoprac.springboot_prac.repository.post.PostRepository;
 import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.request.PostEdit;
@@ -27,41 +26,40 @@ import java.util.*;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final PostMapper postMapper;
 
     public List<PostGetResponse> getPostList(int page) {
         Pageable pageable = PageRequest.of(page, 100, Sort.by(Sort.Direction.DESC, "createAt"));
         Page<Post> postPage = postRepository.findPostByPage(pageable);
 
         return postPage.getContent().stream()
-                .map(postMapper::toGetResponse)
+                .map(PostGetResponse::from)
                 .toList();
     }
 
     public PostGetResponse getPost(Long id) {
         Post post = postRepository.findById(id).orElseThrow(PostNotFound::new);
-        return postMapper.toGetResponse(post);
+
+        return PostGetResponse.from(post);
     }
 
     public List<PostGetResponse> searchPost(PostSearch postSearch) {
         Pageable pageable = PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "createAt"));
-        Page<Post> postPage = postRepository.findByKeywordContaining(postSearch.getKeyword(), pageable);
+        Page<Post> postPage = postRepository.findByKeywordContaining(postSearch.keyword(), pageable);
 
         return postPage.getContent().stream()
-                .map(postMapper::toGetResponse)
+                .map(PostGetResponse::from)
                 .toList();
     }
 
     public PostCreateResponse createPost(PostCreate postCreate) {
-        Post post = postMapper.toEntity(postCreate);
-        Post savedPost = postRepository.save(post);
-        return postMapper.toCreateResponse(savedPost);
+        Post savedPost = postRepository.save(postCreate.toEntity());
+        return PostCreateResponse.from(savedPost);
     }
 
     public PostEditResponse editPost(Long id, PostEdit postEdit) {
         Post post = postRepository.findById(id).orElseThrow(PostNotFound::new);
-        post.edit(postEdit.getTitle(), postEdit.getContent());
-        return postMapper.toEditResponse(post);
+        post.edit(postEdit.title(), postEdit.content());
+        return PostEditResponse.from(post);
     }
 
     public void deletePost(Long id) {

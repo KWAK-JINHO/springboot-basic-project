@@ -48,9 +48,7 @@ public class PostSearchServiceTest {
                 Post.builder().title("제목후").content("내용캬캬").build()
         );
         postRepository.saveAll(posts);
-        PostSearch postSearch = PostSearch.builder()
-                .keyword("후후")
-                .build();
+        PostSearch postSearch = new PostSearch("후후");
 
         // when
         List<PostGetResponse> responses = postService.searchPost(postSearch);
@@ -59,7 +57,7 @@ public class PostSearchServiceTest {
         assertFalse(responses.isEmpty());
         assertEquals(3, responses.size());
         assertTrue(responses.stream()
-                .allMatch(response -> response.getTitle().contains("후후") || response.getContent().contains("후후"))
+                .allMatch(response -> response.title().contains("후후") || response.content().contains("후후"))
         );
 
     }
@@ -75,9 +73,7 @@ public class PostSearchServiceTest {
                 Post.builder().title("제목후").content("내용캬캬").build()
         );
         postRepository.saveAll(posts);
-        PostSearch postSearch = PostSearch.builder()
-                .keyword("gngn")
-                .build();
+        PostSearch postSearch = new PostSearch("gngn");
 
         // when
         List<PostGetResponse> responses = postService.searchPost(postSearch);
@@ -90,9 +86,7 @@ public class PostSearchServiceTest {
     @DisplayName("검색어는 공백을 제외한 1글자 이상이어야 한다.")
     void 공백을_포함하더라도_한글자_이상이면_유효하다() {
         // Given
-        PostSearch postSearch = PostSearch.builder()
-                .keyword("   a   ")
-                .build();
+        PostSearch postSearch = new PostSearch("   a   ");
 
         // When
         Set<ConstraintViolation<PostSearch>> violations = validator.validate(postSearch);

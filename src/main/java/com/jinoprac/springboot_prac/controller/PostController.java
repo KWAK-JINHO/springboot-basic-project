@@ -1,7 +1,6 @@
 package com.jinoprac.springboot_prac.controller;
 
 import com.jinoprac.springboot_prac.exception.InvalidRequest;
-import com.jinoprac.springboot_prac.exception.PostNotFound;
 import com.jinoprac.springboot_prac.request.PostCreate;
 import com.jinoprac.springboot_prac.request.PostEdit;
 import com.jinoprac.springboot_prac.request.PostSearch;
@@ -12,11 +11,8 @@ import com.jinoprac.springboot_prac.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -44,9 +40,7 @@ public class PostController {
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<PostGetResponse> getSearchPosts(@RequestParam(required = false) String keyword) {
-        PostSearch request = PostSearch.builder()
-                .keyword(keyword)
-                .build();
+        PostSearch request = new PostSearch(keyword);
         return postService.searchPost(request);
     }
 

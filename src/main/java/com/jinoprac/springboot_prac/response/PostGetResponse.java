@@ -1,16 +1,23 @@
 package com.jinoprac.springboot_prac.response;
 
+import com.jinoprac.springboot_prac.entity.Post;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Builder
-@Getter
-public class PostGetResponse {
-
-    private final Long id;
-    private final String title;
-    private final String content;
-    private final LocalDateTime createAt;
+public record PostGetResponse(
+        Long id,
+        String title,
+        String content,
+        LocalDateTime createAt
+) {
+    public static PostGetResponse from(Post post) {
+        return PostGetResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .createAt(post.getCreateAt())
+                .build();
+    }
 }

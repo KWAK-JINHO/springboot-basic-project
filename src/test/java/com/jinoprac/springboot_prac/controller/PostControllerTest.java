@@ -41,10 +41,7 @@ class PostControllerTest {
     @DisplayName("/posts 요청 테스트")
     void 게시글_작성_요청() throws Exception {
         // given
-        PostCreate postCreate = PostCreate.builder()
-                .title("제목입니다")
-                .content("내용입니다")
-                .build();
+        PostCreate postCreate = new PostCreate("제목입니다", "내용입니다");
 
         // expected
         mockMvc.perform(post("/posts")
@@ -60,9 +57,7 @@ class PostControllerTest {
     @DisplayName("/posts 요청시 title값은 필수로 있어야 한다.")
     void 게시글_작성_제목누락() throws Exception {
         // given
-        PostCreate postCreate = PostCreate.builder()
-                .content("내용입니다")
-                .build();
+        PostCreate postCreate = new PostCreate(null, "내용입니다.");
 
         // expected
         mockMvc.perform(post("/posts")
@@ -120,10 +115,7 @@ class PostControllerTest {
                 .build();
         postRepository.save(post);
 
-        PostEdit postEdit = PostEdit.builder()
-                .title("수정된 제목입니다")
-                .content("내용입니다")
-                .build();
+        PostEdit postEdit = new PostEdit("수정된 제목입니다", "내용입니다");
 
         //expected
         mockMvc.perform(patch("/posts/{postId}", post.getId())
@@ -166,10 +158,7 @@ class PostControllerTest {
     @DisplayName("게시글 작성 시 제목에 금지단어는 표시될 수 없다.")
     void 게시글_작성시_금지단어_체크() throws Exception {
         // given
-        PostCreate postCreate = PostCreate.builder()
-                .title("무 료판매중")
-                .content("내용입니다")
-                .build();
+        PostCreate postCreate = new PostCreate("무 료판매중", "내용입니다");
 
         // expected
         mockMvc.perform(post("/posts")

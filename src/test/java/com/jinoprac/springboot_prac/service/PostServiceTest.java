@@ -37,10 +37,7 @@ class PostServiceTest {
     @DisplayName("글 작성 테스트 입니다.")
     void 게시글_작성_테스트() {
         // given
-        PostCreate postCreate = PostCreate.builder()
-                .title("제목입니다")
-                .content("내용입니다")
-                .build();
+        PostCreate postCreate = new PostCreate("제목입니다", "내용입니다");
 
         // when
         postService.createPost(postCreate);
@@ -69,8 +66,8 @@ class PostServiceTest {
 
         // then
         assertNotNull(postGetResponse);
-        assertEquals("제목입니다.", postGetResponse.getTitle());
-        assertEquals("내용입니다.", postGetResponse.getContent());
+        assertEquals("제목입니다.", postGetResponse.title());
+        assertEquals("내용입니다.", postGetResponse.content());
     }
 
     @Test
@@ -105,9 +102,9 @@ class PostServiceTest {
 
         // then
         assertEquals(3, responses.size());
-        assertEquals("제목1", responses.get(2).getTitle());
-        assertEquals("제목2", responses.get(1).getTitle());
-        assertEquals("제목3", responses.get(0).getTitle());
+        assertEquals("제목1", responses.get(2).title());
+        assertEquals("제목2", responses.get(1).title());
+        assertEquals("제목3", responses.get(0).title());
     }
 
     @Test
@@ -127,8 +124,8 @@ class PostServiceTest {
 
         // then
         assertEquals(100L, posts.size());
-        assertEquals("제목 200", posts.get(0).getTitle());
-        assertEquals("제목 101", posts.get(99).getTitle());
+        assertEquals("제목 200", posts.get(0).title());
+        assertEquals("제목 101", posts.get(99).title());
     }
 
     @Test
@@ -141,10 +138,7 @@ class PostServiceTest {
                 .build();
         postRepository.save(post);
 
-        PostEdit postEdit = PostEdit.builder()
-                .title("수정된 제목입니다.")
-                .content("내용입니다.")
-                .build();
+        PostEdit postEdit = new PostEdit("수정된 제목입니다.", "내용입니다.");
 
         // when
         postService.editPost(post.getId(), postEdit);
@@ -165,10 +159,7 @@ class PostServiceTest {
                 .build();
         postRepository.save(post);
 
-        PostEdit postEdit = PostEdit.builder()
-                .title("수정된 제목입니다.")
-                .content("내용입니다.")
-                .build();
+        PostEdit postEdit = new PostEdit("수정된 제목입니다.", "내용입니다.");
 
         // expected
         assertThrows(PostNotFound.class, () -> {
