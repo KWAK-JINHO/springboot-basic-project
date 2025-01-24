@@ -15,13 +15,13 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "제목", nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "내용", nullable = false)
+    @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "생성 시간", nullable = false)
+    @Column(name = "createAt", nullable = false)
     private LocalDateTime createAt;
 
     @Builder

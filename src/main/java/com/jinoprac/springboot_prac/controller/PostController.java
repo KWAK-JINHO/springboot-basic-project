@@ -38,12 +38,11 @@ public class PostController {
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<PostGetResponse>> getSearchPosts(@RequestParam(required = false) String keyword) {
+    public List<PostGetResponse> getSearchPosts(@RequestParam(required = false) String keyword) {
         PostSearch request = PostSearch.builder()
                 .keyword(keyword)
                 .build();
-        List<PostGetResponse> responses = postService.searchPost(request);
-        return ResponseEntity.ok(responses);
+        return postService.searchPost(request);
     }
 
     @PostMapping
