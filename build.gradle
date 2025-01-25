@@ -26,6 +26,12 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    asciidocVersion = "3.0.3"
+    // asciidoc 위치 지정
+    snippetsDir = file('build/generated-snippets')
+}
+
 dependencies {
 
     // Spring WebMvc
@@ -51,10 +57,29 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // Restdocs
-    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.6.RELEASE'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.6.RELEASE'
+    asciidoctorExt "org.springframework.restdocs:spring-restdocs-asciidoctor:${asciidocVersion}"
+    testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc:${asciidocVersion}"
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+
+    copy{
+        from asciidoctor.outputDir
+        into "src/main/resources/static/docs"
+    }
 }
