@@ -1,22 +1,83 @@
 = Jinho Board API
-:toc:
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toc-title: 목차
+:toclevels: 2
+:sectlinks:
+:revdate: 2025-01-26
+:revnumber: 1.0.0
 
-== 글 단건조회
+== 개요
+이 문서는 Jinho Board의 REST API 명세를 제공합니다.
+
+== 게시글 목록 조회
 
 === 요청
 
-include::{snippets}/index/http-request.adoc[]
-
-include::{snippets}/index/path-parameters.adoc[]
-
-include::{snippets}/index/request-fields.adoc[]
+include::{snippets}/post-list/http-request.adoc[]
+include::{snippets}/post-list/query-parameters.adoc[]
 
 === 응답
 
-include::{snippets}/index/http-response.adoc[]
+include::{snippets}/post-list/http-response.adoc[]
+include::{snippets}/post-list/response-fields.adoc[]
 
-include::{snippets}/index/response-fields.adoc[]
+== 게시글 단건조회
 
-=== curl
+=== 요청
 
-include::{snippets}/index/curl-request.adoc[]
+include::{snippets}/post-inquiry/http-request.adoc[]
+include::{snippets}/post-inquiry/path-parameters.adoc[]
+
+=== 응답
+
+include::{snippets}/post-inquiry/http-response.adoc[]
+include::{snippets}/post-inquiry/response-fields.adoc[]
+
+== 게시글 작성
+
+=== 요청
+
+include::{snippets}/post-create/http-request.adoc[]
+include::{snippets}/post-create/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/post-create/http-response.adoc[]
+
+== 게시글 수정
+
+=== 요청
+
+include::{snippets}/post-edit/http-request.adoc[]
+include::{snippets}/post-edit/path-parameters.adoc[]
+include::{snippets}/post-edit/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/post-edit/http-response.adoc[]
+
+== 게시글 삭제
+
+=== 요청
+
+include::{snippets}/post-delete/http-request.adoc[]
+include::{snippets}/post-delete/path-parameters.adoc[]
+
+=== 응답
+
+include::{snippets}/post-delete/http-response.adoc[]
+
+== 게시글 검색
+
+=== 요청
+
+include::{snippets}/post-search/http-request.adoc[]
+include::{snippets}/post-search/query-parameters.adoc[]
+
+=== 응답
+
+include::{snippets}/post-search/http-response.adoc[]
+include::{snippets}/post-search/response-fields.adoc[]
