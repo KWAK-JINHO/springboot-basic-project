@@ -37,5 +37,4 @@ out/
 .vscode/
 
 src/main/resources/**.yml
-.gitsecret/keys/random_seed
-!*.secret
+.gitsecret/keys/
