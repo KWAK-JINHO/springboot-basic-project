@@ -1,7 +1,7 @@
 package com.jinoprac.springboot_prac.exception;
 
 /**
- * status -> 404 (이상적인 PostNotFound의 상태코드)
+ * status -> 404
  */
 public class PostNotFound extends BoardApplicationException  {
 

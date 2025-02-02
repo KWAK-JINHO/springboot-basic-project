@@ -41,7 +41,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("게시글 등록")
+    @DisplayName("게시글 등록이 잘 돼요")
     void 게시글_작성() throws Exception {
         // given
         PostCreate postCreate = new PostCreate("제목입니다", "내용입니다");
