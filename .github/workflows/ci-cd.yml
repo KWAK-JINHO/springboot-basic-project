@@ -11,6 +11,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    outputs:
+      formattedTime: ${{ steps.current-time.outputs.formattedTime }}
+
     steps:
       - uses: actions/checkout@v3
       - name: 자바 설정
@@ -113,3 +117,30 @@ jobs:
             exit 1
           fi
           echo "JAR_PATH=$JAR_PATH" >> $GITHUB_ENV
+
+      - name: 배포 및 서버 재시작
+        run: |
+          REMOTE_PATH="/home/ec2-user/springboot_prac/${{ env.APP_NAME }}-${{ needs.build.outputs.formattedTime }}.jar"
+
+          echo "기존 jar 파일 정리 중..."
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /home/ec2-user/springboot_prac
+            rm -f *.jar
+          EOF
+
+          echo "JAR 파일 전송 중..."
+          scp -i /tmp/ssh_key -o StrictHostKeyChecking=no $JAR_PATH ec2-user@${{ secrets.EC2_HOST }}:$REMOTE_PATH
+
+          echo "기존 애플리케이션 종료 및 새 애플리케이션 실행 중..."
+          ssh -i /tmp/ssh_key -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << EOF
+            cd /home/ec2-user/springboot_prac
+
+            pkill -f "${{ env.APP_NAME }}" || echo "실행 중인 프로세스 없음"
+            sleep 5
+
+            echo "Spring Boot 애플리케이션 실행 중..."
+            nohup java -jar $REMOTE_PATH --spring.profiles.active=${{ env.SPRING_PROFILES_ACTIVE }} > /home/ec2-user/app.log 2>&1 & disown
+            exit
+            EOF
+  
+                      echo "배포 완료."
